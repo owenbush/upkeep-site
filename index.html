@@ -727,7 +727,7 @@ a:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; border-ra
   <section class="section" id="workflow">
     <div class="section-header">
       <span class="eyebrow">THE DAILY LOOP</span>
-      <h2>A morning of triage, five commands.</h2>
+      <h2>A morning of triage, seven commands.</h2>
     </div>
     <div class="workflow-list">
       <div class="workflow-step">
@@ -736,6 +736,13 @@ a:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; border-ra
           <code class="step-cmd">upkeep dashboard</code>
         </div>
         <p class="step-desc">Every open MR across every registered module, in one table: CI status, local check results, the linked drupal.org issue state, and the fast-lane gate verdict. Cached so it returns instantly; <code>--refresh</code> when you want fresh data.</p>
+      </div>
+      <div class="workflow-step">
+        <div class="step-label">
+          <span class="step-name">Patches</span>
+          <code class="step-cmd">upkeep patches</code>
+        </div>
+        <p class="step-desc">Scans drupal.org for issues in Needs Review or RTBC that have no corresponding GitLab merge request — the patch-only contributions your MR dashboard can't see. Shows the latest patch per issue so you know what to look at.</p>
       </div>
       <div class="workflow-step">
         <div class="step-label">
@@ -750,6 +757,13 @@ a:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; border-ra
           <code class="step-cmd">upkeep review entity_clone 142</code>
         </div>
         <p class="step-desc">Applies the MR to a running site and hands back a browser URL with a one-time login. Green checks are not the same as looking at the thing.</p>
+      </div>
+      <div class="workflow-step">
+        <div class="step-label">
+          <span class="step-name">Needs work</span>
+          <code class="step-cmd">upkeep needs-work entity_clone 142</code>
+        </div>
+        <p class="step-desc">When checks fail, posts a structured results table — per-check status, durations, failure output — as a comment on the GitLab MR, then opens the linked drupal.org issue so you can set it to Needs work. <code>--dry-run</code> previews the comment without posting.</p>
       </div>
       <div class="workflow-step">
         <div class="step-label">
@@ -856,8 +870,10 @@ a:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; border-ra
     </div>
     <div class="cmd-table">
       <div class="cmd-row"><code>dashboard</code><span>All open MRs with CI, local check, issue status and fast-lane gate</span></div>
+      <div class="cmd-row"><code>patches</code><span>Drupal.org issues with patches but no merge request</span></div>
       <div class="cmd-row"><code>check</code><span>Full isolated check flow for one MR — PHPUnit, PHPStan, PHPCS, install, smoke</span></div>
       <div class="cmd-row"><code>review</code><span>Apply an MR to a running site and get a browser URL</span></div>
+      <div class="cmd-row"><code>needs-work</code><span>Post check results as a structured comment on the MR, then open the linked issue</span></div>
       <div class="cmd-row"><code>issue</code><span>Show and open the linked drupal.org issue</span></div>
       <div class="cmd-row"><code>merge --fast-lane</code><span>Human-approved merge of gate-passing MRs, one at a time</span></div>
       <div class="cmd-row"><code>exec</code><span>Run a command inside a module’s environment</span></div>
