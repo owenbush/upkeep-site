@@ -727,7 +727,7 @@ a:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; border-ra
   <section class="section" id="workflow">
     <div class="section-header">
       <span class="eyebrow">THE DAILY LOOP</span>
-      <h2>A morning of triage, seven commands.</h2>
+      <h2>A morning of triage, eight commands.</h2>
     </div>
     <div class="workflow-list">
       <div class="workflow-step">
@@ -778,6 +778,13 @@ a:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; border-ra
           <code class="step-cmd">upkeep merge --fast-lane</code>
         </div>
         <p class="step-desc">Bot MRs that cleared every gate: one prompt, one approval, one merge. There is no batch mode, deliberately — merges stay human-approved to comply with Drupal Association policy.</p>
+      </div>
+      <div class="workflow-step">
+        <div class="step-label">
+          <span class="step-name">Dev</span>
+          <code class="step-cmd">upkeep dev entity_clone --branch=feature/x</code>
+        </div>
+        <p class="step-desc">Provisions an environment for active development — not just triage. Optionally checks out a branch, prints the module path and site URL. The module working copy is a real git clone, so write code, run tests with <code>exec</code>, commit and push as normal. Once pushed, triage commands work in the same environment again. Upkeep guards against destroying uncommitted changes, unpushed commits, or feature branches — no <code>--force</code> flag, just clear error messages.</p>
       </div>
     </div>
   </section>
@@ -854,10 +861,11 @@ a:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; border-ra
         <div>
           <div class="setup-step-title">Initialise the cockpit</div>
           <code class="dark-code">upkeep init ~/my-cockpit</code>
+          <span class="setup-step-note">Creates the registry, base-artifacts, fixtures, and a <code>projects/</code> directory. Environments are stored inside the cockpit — create separate cockpits per client or workflow.</span>
         </div>
         <div>
           <div class="setup-step-title">Register your modules, build base artifacts</div>
-          <span class="setup-step-note">Then run <code>upkeep dashboard</code> and you’re in.</span>
+          <span class="setup-step-note"><code>cd</code> into the cockpit and run <code>upkeep modules:add</code>, then <code>upkeep dashboard</code>. Everything resolves locally — no extra flags needed.</span>
         </div>
       </div>
     </div>
@@ -876,9 +884,13 @@ a:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; border-ra
       <div class="cmd-row"><code>needs-work</code><span>Post check results as a structured comment on the MR, then open the linked issue</span></div>
       <div class="cmd-row"><code>issue</code><span>Show and open the linked drupal.org issue</span></div>
       <div class="cmd-row"><code>merge --fast-lane</code><span>Human-approved merge of gate-passing MRs, one at a time</span></div>
+      <div class="cmd-row"><code>dev</code><span>Provision an environment for active development, with working-copy safety guards</span></div>
       <div class="cmd-row"><code>exec</code><span>Run a command inside a module’s environment</span></div>
+      <div class="cmd-row"><code>env:path</code><span>Print the environment directory — use with <code style="background:none;padding:0">cd $(upkeep env:path ...)/module</code></span></div>
+      <div class="cmd-row"><code>init</code><span>Scaffold a new cockpit: registry, base-artifacts, fixtures, and projects directories</span></div>
+      <div class="cmd-row"><code>modules:add</code><span>Register maintained modules from your GitLab memberships</span></div>
       <div class="cmd-row"><code>notes</code><span>Draft release notes from MRs merged since the last tag</span></div>
-      <div class="cmd-row"><code>status / prune</code><span>Disk inventory and cleanup</span></div>
+      <div class="cmd-row"><code>status / prune</code><span>Disk inventory and cleanup — prune skips environments with local work</span></div>
     </div>
   </section>
 
