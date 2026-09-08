@@ -1,8 +1,25 @@
-name: Deploy to GitHub Pages
+name: Build and deploy
+
+# The documentation is not authored in this repository — it is pulled from
+# owenbush/upkeep at build time, so a page and the code it describes are
+# reviewed in the same pull request over there. That means this site has to
+# rebuild when *that* repository changes, not only when this one does:
+#
+#   - push here          — a change to the landing page, the theme or the sync
+#   - schedule           — picks up merged docs changes without any secret
+#   - workflow_dispatch  — "Run workflow" to publish a docs change immediately
+#
+# To make an upkeep docs change deploy the moment it merges, add a workflow
+# there that sends a repository_dispatch to this repo with a PAT. Deliberately
+# not the default: it costs a stored credential, and a day is not a long time
+# for a documentation page.
 
 on:
   push:
     branches: [main]
+  schedule:
+    - cron: '17 6 * * *'
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -20,10 +37,32 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Check out the site
+        uses: actions/checkout@v4
+
+      - name: Check out upkeep (the documentation source of truth)
+        uses: actions/checkout@v4
+        with:
+          repository: owenbush/upkeep
+          path: .upkeep
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # Fails the build on a documentation link that points outside the synced
+      # set, rather than publishing a page with a dead link in it.
+      - name: Sync the documentation
+        run: node scripts/sync-docs.mjs .upkeep
+
+      - run: npm run build:nosync
+
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: dist
       - id: deployment
         uses: actions/deploy-pages@v4
