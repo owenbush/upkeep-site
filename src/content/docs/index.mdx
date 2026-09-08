@@ -94,18 +94,17 @@ evidence a row carries rather than part of what a row *is*.
 
 <Steps>
 
-1. **Install from a clone.** Not yet on Packagist.
+1. **Install.**
 
    ```bash
-   git clone https://github.com/owenbush/upkeep.git
-   cd upkeep && composer install
+   composer global require owenbush/upkeep
    ```
 
 2. **Scaffold a cockpit** — the directory holding your registry, environments, base
    artifacts, fixtures and cached results.
 
    ```bash
-   ./bin/upkeep init ~/my-cockpit && cd ~/my-cockpit
+   upkeep init ~/my-cockpit && cd ~/my-cockpit
    ```
 
 3. **Build the base artifacts** for a core version you maintain for. Every environment is
