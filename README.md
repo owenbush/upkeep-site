@@ -42,3 +42,14 @@ points outside the synced set, rather than publishing a dead one.
 GitHub Pages, via `.github/workflows/deploy.yml`, on push here, daily, or on
 demand from the Actions tab. The daily run is what picks up documentation
 merged in the upkeep repository; use "Run workflow" to publish one immediately.
+
+**Requires a `DOCS_READ_TOKEN` repository secret** holding a token with read
+access to `owenbush/upkeep`. The build checks that repository out, the job's
+own `GITHUB_TOKEN` is scoped to this one, and upkeep is private while it is
+unreleased — so without the secret the checkout gets a 404 from the API. The
+workflow checks for it first and says so, rather than failing later with
+"Not Found".
+
+A missing token fails the build instead of deploying the site without its
+documentation. Every sidebar entry would 404, and a stale site is coherent
+where a hollow one is not — so the previous deploy stays up.

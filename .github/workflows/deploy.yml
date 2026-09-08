@@ -13,6 +13,11 @@ name: Build and deploy
 # there that sends a repository_dispatch to this repo with a PAT. Deliberately
 # not the default: it costs a stored credential, and a day is not a long time
 # for a documentation page.
+#
+# A missing DOCS_READ_TOKEN fails the build rather than deploying the site
+# without its documentation. Every sidebar entry would 404, which is worse
+# than the previous deploy staying up: a stale site is coherent, a hollow one
+# is not.
 
 on:
   push:
@@ -40,11 +45,31 @@ jobs:
       - name: Check out the site
         uses: actions/checkout@v4
 
+      # The job's own GITHUB_TOKEN is scoped to this repository, and upkeep is
+      # private while it is unreleased — so a checkout of it with the default
+      # token gets a 404 from the API and retries into a failure whose message
+      # ("Not Found") says nothing about the cause. Checked first so the
+      # failure names the secret instead.
+      # Read through `env` rather than tested in an `if:` — the secrets context
+      # is not available to a step-level condition, so an `if` on it does not
+      # do what it reads as.
+      - name: Require the documentation read token
+        env:
+          DOCS_READ_TOKEN: ${{ secrets.DOCS_READ_TOKEN }}
+        run: |
+          if [ -z "${DOCS_READ_TOKEN}" ]; then
+            echo '::error::DOCS_READ_TOKEN is not set, so owenbush/upkeep cannot be checked out.'
+            echo 'The documentation is pulled from that repository at build time, and it is private.'
+            echo 'Add a repository secret DOCS_READ_TOKEN holding a token with read access to it.'
+            exit 1
+          fi
+
       - name: Check out upkeep (the documentation source of truth)
         uses: actions/checkout@v4
         with:
           repository: owenbush/upkeep
           path: .upkeep
+          token: ${{ secrets.DOCS_READ_TOKEN }}
 
       - uses: actions/setup-node@v4
         with:
