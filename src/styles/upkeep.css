@@ -1,0 +1,56 @@
+/*
+ * The palette from the previous hand-built page, carried over so the docs read
+ * as the same product: a warm off-white ground rather than pure white, a
+ * near-black dark theme, and the three verdict colours the dashboard prints.
+ */
+:root {
+  --upkeep-pass: #2f7a4f;
+  --upkeep-review: #9a6516;
+  --upkeep-blocked: #a33232;
+
+  --sl-color-accent-low: #d3ddf3;
+  --sl-color-accent: #2f56c4;
+  --sl-color-accent-high: #1d3a91;
+  --sl-color-white: #131619;
+  --sl-color-gray-1: #1b1d21;
+  --sl-color-gray-2: #4a4c52;
+  --sl-color-gray-3: #6b6e75;
+  --sl-color-gray-4: #9a9ca2;
+  --sl-color-gray-5: #dcdad3;
+  --sl-color-gray-6: #eceae4;
+  --sl-color-gray-7: #f2f0ec;
+  --sl-color-black: #e8e6e0;
+}
+
+:root[data-theme='dark'] {
+  --upkeep-pass: #5fbf87;
+  --upkeep-review: #d9a13c;
+  --upkeep-blocked: #e07070;
+
+  --sl-color-accent-low: #17224a;
+  --sl-color-accent: #2f56c4;
+  --sl-color-accent-high: #a1c0ee;
+  --sl-color-white: #f5f4f0;
+  --sl-color-gray-1: #dfe1e5;
+  --sl-color-gray-2: #c9ccd2;
+  --sl-color-gray-3: #9ca0a8;
+  --sl-color-gray-4: #636870;
+  --sl-color-gray-5: #262a31;
+  --sl-color-gray-6: #1d2026;
+  --sl-color-black: #0c0e11;
+}
+
+/*
+ * Terminal transcripts are the main illustration in these docs, and several
+ * are wide (the dashboard is ten columns). They scroll rather than wrap:
+ * a wrapped table column is unreadable, and a wrapped command is uncopyable.
+ */
+.sl-markdown-content pre {
+  font-size: 0.8125rem;
+  line-height: 1.55;
+}
+
+/* Verdict words, wherever they appear in prose. */
+.sl-markdown-content code:not(pre code):is([data-verdict]) {
+  font-weight: 600;
+}

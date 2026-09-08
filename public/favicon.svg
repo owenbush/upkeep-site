@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- The mark from the previous site: a "u" on the ink colour of the theme. -->
+  <rect width="64" height="64" rx="14" fill="#1b1d21"/>
+  <path d="M20 20v15.5c0 5.2 3.4 8.5 8.6 8.5 3.6 0 6.3-1.6 7.8-4.3V44H43V20h-6.6v14.2c0 3.3-2 5.5-5 5.5-2.9 0-4.8-2-4.8-5.2V20z"
+        fill="#e8e6e0"/>
+</svg>

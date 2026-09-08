@@ -1,0 +1,148 @@
+---
+title: Upkeep
+description: A maintenance orchestrator CLI for contributed Drupal modules — every open contribution, checked in an isolated environment, merged one deliberate approval at a time.
+template: splash
+hero:
+  tagline: |
+    Run the whole triage loop from your terminal. Every open issue and merge request
+    across every module you maintain, checked in a fully isolated environment, reviewed
+    in a real browser, merged one deliberate approval at a time.
+  actions:
+    - text: Get started
+      link: /guide/install/
+      icon: right-arrow
+    - text: View on GitHub
+      link: https://github.com/owenbush/upkeep
+      icon: external
+      variant: minimal
+---
+
+import { Card, CardGrid, LinkCard, Steps, Aside } from '@astrojs/starlight/components';
+
+## Where should I look?
+
+The dashboard has two tiers, because volume is real — a mature contrib project can carry
+a hundred open merge requests.
+
+```
+MODULE      BRANCHES         MRS    PATCH ISSUES    READY    CI FAILED    UNCHECKED    CACHED
+
+pathauto    8.x-1.x          100              22        –            2          118    17h ago
+paragraphs  1.0.x,2.0.x       12              61        2            1           71    2m ago
+```
+
+Name a module and every row carries what it is in plain English, and the command to run next:
+
+```
+MODULE    ISSUE            VERSION  TITLE                    MR      PATCH  CI    LOCAL       STATUS          NEXT
+
+pathauto  3262847 review   8.x-1.x  Only update child taxo…  !12     –      –     –           needs a check   upkeep check pathauto 12 --version=10
+pathauto  3608383 RTBC     8.x-1.x  Remove forum integratio  !99     –      pass  pass 10,11  ready to merge  upkeep merge --fast-lane
+pathauto  3311669 review   8.x-1.x  Punctuation processed…   !40 +1  2 ↑    fail  fail 10     CI failed       upkeep check pathauto 40 --version=10
+pathauto  3597857 active   8.x-1.x  Config schema for form   –       4      –     stale 11    4 patches       upkeep patch:check pathauto 3597857
+```
+
+**A row is one issue's work on one branch.** Not one per merge request, and not multiplied
+by the core versions you test — a single branch supports several cores at once, so core is
+evidence a row carries rather than part of what a row *is*.
+
+[How a row is built →](/design/row-model/)
+
+## The loop
+
+<CardGrid>
+  <Card title="Start at an issue" icon="pencil">
+    `issues` lists every open issue and what has already been contributed to it. `start`
+    provisions an environment and opens a work branch; `publish` pushes it to an issue fork
+    and opens the merge request.
+
+    [Work on an issue →](/guide/issue-loop/)
+  </Card>
+  <Card title="Check it properly" icon="approve-check">
+    A disposable per-module-per-core environment, then PHPUnit, PHPStan, PHPCS, install and
+    smoke. **The merge, not the branch** — the same tree drupal.org CI analyses.
+
+    [Running checks →](/guide/checks/)
+  </Card>
+  <Card title="See the patches" icon="document">
+    Plenty of contribution never becomes a merge request. `patches` finds issues carrying
+    patch files, checks one in isolation, or promotes it onto a branch credited to its author.
+
+    [Patch contributions →](/guide/patches/)
+  </Card>
+  <Card title="Look at the thing" icon="laptop">
+    `review` applies a merge request to a running site and hands back a URL with a one-time
+    login. Green checks are not the same as looking at it.
+
+    [Review and merge →](/guide/review-and-merge/)
+  </Card>
+  <Card title="Check against real state" icon="seti:db">
+    A fixture is a sanitised SQL dump committed to your module at `tests/fixtures/`. Capture
+    the site your module actually lives in once, and check against it every time.
+
+    [Fixtures →](/guide/fixtures/)
+  </Card>
+  <Card title="Any module, not just yours" icon="puzzle">
+    The registry is a watchlist, not a gate. Point any command at any Drupal module —
+    registered or not — and the dashboard stays the view of the ones you care about.
+
+    [Why →](/design/any-module/)
+  </Card>
+</CardGrid>
+
+## Four steps to a cockpit
+
+<Steps>
+
+1. **Install from a clone.** Not yet on Packagist.
+
+   ```bash
+   git clone https://github.com/owenbush/upkeep.git
+   cd upkeep && composer install
+   ```
+
+2. **Scaffold a cockpit** — the directory holding your registry, environments, base
+   artifacts, fixtures and cached results.
+
+   ```bash
+   ./bin/upkeep init ~/my-cockpit && cd ~/my-cockpit
+   ```
+
+3. **Build the base artifacts** for a core version you maintain for. Every environment is
+   copied from these, so a cold start costs a copy rather than a resolve.
+
+   ```bash
+   upkeep base-artifacts:build --version=11
+   ```
+
+4. **Look at something.**
+
+   ```bash
+   upkeep issues pathauto
+   upkeep dashboard pathauto
+   ```
+
+</Steps>
+
+<Aside type="tip" title="Reading needs no credential">
+  git.drupalcode.org serves a public project's merge requests, refs, forks and raw files
+  anonymously, so `dashboard`, `issues`, `check` and `review` work with no token at all.
+  A [token](/guide/gitlab-token/) is for *writing*: merging, commenting and publishing.
+</Aside>
+
+## One approval per merge
+
+Upkeep's fast lane finds the merge requests that cleared every gate — usually Project Update
+Bot compatibility work — and then asks you about each one, individually, before merging it.
+
+There is deliberately **no batch mode and no unattended merge path**, and the browser UI
+deliberately has no merge button: a button that POSTs an action name is not the per-merge-request
+prompt that earns the approval. That is Drupal Association policy, and it is asserted
+structurally in the test suite rather than left to good intentions.
+
+<CardGrid>
+  <LinkCard title="Every command" href="/reference/commands/"
+    description="Generated from the CLI itself, and gated in CI — it cannot drift from what the binary does." />
+  <LinkCard title="Architecture and rationale" href="/design/architecture/"
+    description="The adapter boundary, cold starts, fixtures, and the policy analysis behind the fast lane." />
+</CardGrid>
