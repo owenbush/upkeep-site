@@ -94,11 +94,10 @@ evidence a row carries rather than part of what a row *is*.
 
 <Steps>
 
-1. **Install**, into its own directory so nothing collides with it.
+1. **Install.**
 
    ```bash
-   composer create-project owenbush/upkeep ~/.upkeep/app
-   ln -s ~/.upkeep/app/bin/upkeep /usr/local/bin/upkeep
+   composer global require owenbush/upkeep
    ```
 
 2. **Scaffold a cockpit** — the directory holding your registry, environments, base
