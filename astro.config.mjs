@@ -37,6 +37,7 @@ export default defineConfig({
           items: [
             { label: 'The dashboard', slug: 'guide/dashboard' },
             { label: 'Work on an issue', slug: 'guide/issue-loop' },
+            { label: "Work on somebody else's MR", slug: 'guide/taking-over-an-mr' },
             { label: 'Patch contributions', slug: 'guide/patches' },
             { label: 'Running checks', slug: 'guide/checks' },
             { label: 'Review, merge and release notes', slug: 'guide/review-and-merge' },
