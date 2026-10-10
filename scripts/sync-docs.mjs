@@ -33,6 +33,7 @@ const PAGES = [
   ['guide/publishing.md', 'guide/publishing.md'],
   ['guide/dashboard.md', 'guide/dashboard.md'],
   ['guide/issue-loop.md', 'guide/issue-loop.md'],
+  ['guide/taking-over-an-mr.md', 'guide/taking-over-an-mr.md'],
   ['guide/patches.md', 'guide/patches.md'],
   ['guide/checks.md', 'guide/checks.md'],
   ['guide/review-and-merge.md', 'guide/review-and-merge.md'],
