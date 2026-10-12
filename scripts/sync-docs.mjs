@@ -43,9 +43,6 @@ const PAGES = [
   ['reference/exit-codes.md', 'reference/exit-codes.md'],
   ['reference/disk.md', 'reference/disk.md'],
   ['reference/upgrading.md', 'reference/upgrading.md'],
-  ['contrib-maintainer-design.md', 'design/architecture.md'],
-  ['dashboard-row-model.md', 'design/row-model.md'],
-  ['any-module.md', 'design/any-module.md'],
 ];
 
 const route = (dest) => '/' + dest.replace(/\.md$/, '') + '/';
@@ -87,6 +84,11 @@ function parse(markdown) {
 
 rmSync(join(out, 'guide'), { recursive: true, force: true });
 rmSync(join(out, 'reference'), { recursive: true, force: true });
+// Kept although PAGES no longer writes anything here: the design documents
+// were removed from the upkeep repository, and without this an existing
+// checkout keeps the pages it synced last time — which Starlight would publish
+// with no sidebar entry pointing at them. Safe to delete once no working copy
+// predates that change.
 rmSync(join(out, 'design'), { recursive: true, force: true });
 
 let unresolved = 0;

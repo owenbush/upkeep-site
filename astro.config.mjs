@@ -2,7 +2,7 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
-// The docs under src/content/docs/{guide,reference,design} are NOT authored
+// The docs under src/content/docs/{guide,reference} are NOT authored
 // here — `npm run sync` pulls them from the upkeep repository, where they sit
 // beside the code they describe. See scripts/sync-docs.mjs.
 export default defineConfig({
@@ -52,15 +52,6 @@ export default defineConfig({
             { label: 'Exit codes', slug: 'reference/exit-codes' },
             { label: 'Disk housekeeping', slug: 'reference/disk' },
             { label: 'Upgrading a cockpit', slug: 'reference/upgrading' },
-          ],
-        },
-        {
-          label: 'Design',
-          collapsed: true,
-          items: [
-            { label: 'Architecture and rationale', slug: 'design/architecture' },
-            { label: 'The dashboard row model', slug: 'design/row-model' },
-            { label: 'Any module, not just yours', slug: 'design/any-module' },
           ],
         },
       ],

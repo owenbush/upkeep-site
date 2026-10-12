@@ -46,7 +46,7 @@ pathauto  3597857 active   8.x-1.x  Config schema for form   –       4      �
 by the core versions you test — a single branch supports several cores at once, so core is
 evidence a row carries rather than part of what a row *is*.
 
-[How a row is built →](/design/row-model/)
+[What a row represents →](/guide/dashboard/)
 
 ## The loop
 
@@ -86,7 +86,7 @@ evidence a row carries rather than part of what a row *is*.
     The registry is a watchlist, not a gate. Point any command at any Drupal module —
     registered or not — and the dashboard stays the view of the ones you care about.
 
-    [Why →](/design/any-module/)
+    [The registry →](/guide/cockpit/)
   </Card>
 </CardGrid>
 
@@ -148,6 +148,6 @@ structurally in the test suite rather than left to good intentions.
 <CardGrid>
   <LinkCard title="Every command" href="/reference/commands/"
     description="Generated from the CLI itself, and gated in CI — it cannot drift from what the binary does." />
-  <LinkCard title="Architecture and rationale" href="/design/architecture/"
-    description="The adapter boundary, cold starts, fixtures, and the policy analysis behind the fast lane." />
+  <LinkCard title="Review, merge and release notes" href="/guide/review-and-merge/"
+    description="The fast lane, the per-merge-request prompt it still asks, and drafting notes for a release." />
 </CardGrid>
