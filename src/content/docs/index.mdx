@@ -94,11 +94,17 @@ evidence a row carries rather than part of what a row *is*.
 
 <Steps>
 
-1. **Install.**
+1. **Install.** One static binary — no PHP, no Composer, nothing to keep
+   up to date but the binary itself.
 
    ```bash
-   composer global require owenbush/upkeep
+   brew install owenbush/tap/upkeep
    ```
+
+   Linux, or no Homebrew: take the archive from the
+   [releases page](https://github.com/owenbush/upkeep/releases), or
+   `go install github.com/owenbush/upkeep/cmd/upkeep@latest`. See
+   [Install](/guide/install/) for all three.
 
 2. **Scaffold a cockpit** — the directory holding your registry, environments, base
    artifacts, fixtures and cached results.
