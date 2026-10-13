@@ -35,6 +35,7 @@ export default defineConfig({
         {
           label: 'Daily flow',
           items: [
+            { label: 'Which command do I want?', slug: 'guide/which-command' },
             { label: 'The dashboard', slug: 'guide/dashboard' },
             { label: 'Work on an issue', slug: 'guide/issue-loop' },
             { label: "Work on somebody else's MR", slug: 'guide/taking-over-an-mr' },

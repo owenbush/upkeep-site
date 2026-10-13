@@ -27,6 +27,7 @@ if (!existsSync(join(repo, 'docs'))) {
 // both the file layout and every rewritten link.
 const PAGES = [
   ['guide/install.md', 'guide/install.md'],
+  ['guide/which-command.md', 'guide/which-command.md'],
   ['guide/gitlab-token.md', 'guide/gitlab-token.md'],
   ['guide/cockpit.md', 'guide/cockpit.md'],
   ['base-artifacts.md', 'guide/base-artifacts.md'],
