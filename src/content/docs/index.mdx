@@ -4,25 +4,99 @@ description: A maintenance orchestrator CLI for contributed Drupal modules — e
 template: splash
 hero:
   tagline: |
-    Run the whole triage loop from your terminal. Every open issue and merge request
-    across every module you maintain, checked in a fully isolated environment, reviewed
-    in a real browser, merged one deliberate approval at a time.
+    Every open issue, merge request and patch across every module you maintain —
+    triaged, checked in a disposable environment, and merged one deliberate
+    approval at a time. One static binary, no runtime to install.
   actions:
-    - text: Get started
+    - text: Install
       link: /guide/install/
       icon: right-arrow
+    - text: Read the docs
+      link: /guide/dashboard/
+      icon: open-book
+      variant: minimal
     - text: View on GitHub
       link: https://github.com/owenbush/upkeep
       icon: external
       variant: minimal
 ---
 
-import { Card, CardGrid, LinkCard, Steps, Aside } from '@astrojs/starlight/components';
+import { Card, CardGrid, LinkCard, Aside } from '@astrojs/starlight/components';
 
-## Where should I look?
+```bash
+brew install owenbush/tap/upkeep
+```
 
-The dashboard has two tiers, because volume is real — a mature contrib project can carry
-a hundred open merge requests.
+macOS and Linux, amd64 and arm64. No PHP and no Composer — the binary is static,
+signed and notarized. Prefer Go, or no Homebrew?
+
+```bash
+go install github.com/owenbush/upkeep/cmd/upkeep@latest
+```
+
+Or take an archive from the [releases page](https://github.com/owenbush/upkeep/releases).
+It drives [ddev](https://ddev.com/), which you will want. Full options, including
+shell completion, are in [Install](/guide/install/).
+
+## The problem
+
+Maintaining a contrib module is mostly triage, and the triage is the expensive part.
+A mature project carries a hundred open merge requests, sixty issues with patches
+attached, and a Project Update Bot compatibility branch waiting on every new core
+release. Working out which of those is actually ready costs more than reviewing the
+one that is.
+
+So the work piles up — not because the fixes are hard, but because finding the
+ready ones means a browser, a dozen tabs, and a local site you daren't break.
+
+## Where it helps
+
+<CardGrid>
+  <Card title="The next core version just landed" icon="rocket">
+    Project Update Bot opens a compatibility merge request on every module you
+    maintain. Check all of them against the new core in disposable environments,
+    then merge the green ones — each with its own deliberate yes.
+
+    Base artifacts for a **pre-release** core major are a supported, deliberate
+    build, because that is when compatibility work actually happens.
+  </Card>
+  <Card title="Green locally, red on CI" icon="warning">
+    drupal.org does not test the contributor's branch — it tests that branch merged
+    into the *current* tip of the target. Measured on pathauto: **23 of 25 open
+    merge requests** have a merge tree that differs from their branch, some of them
+    41 commits behind.
+
+    Upkeep checks the same tree CI does, so a local pass means something.
+  </Card>
+  <Card title="Half the contributions aren't merge requests" icon="document">
+    Patches posted to an issue are invisible to a merge-request view, and plenty of
+    real work arrives that way. Upkeep finds them, applies one against the branch
+    its issue was filed against, and can promote it onto a work branch **credited
+    to the person who posted it**.
+  </Card>
+  <Card title="Somebody's MR needs finishing" icon="pencil">
+    A bot MR that stopped short of the `info.yml` change, or a contribution that
+    went quiet. `upkeep checkout` puts your working copy on its actual source
+    branch, adds the remote to push back to, and tells you the command that sends
+    it.
+  </Card>
+  <Card title="Your module needs more than an empty site" icon="seti:db">
+    A module that manages vocabulary terms cannot be tested without terms. Capture
+    the state once as a sanitised, committed fixture and check against it every
+    time — including the other contrib it needs, installed automatically wherever
+    it is loaded.
+  </Card>
+  <Card title="The issue queue moved to GitLab" icon="puzzle">
+    drupal.org is migrating issue queues, one project at a time. Upkeep asks each
+    project where its issues live and reads whichever queue is the live one — so a
+    migrated project keeps working, including issues that have no drupal.org node
+    at all.
+  </Card>
+</CardGrid>
+
+## What it looks like
+
+Two tiers, because volume is real. Start wide:
 
 ```
 MODULE      BRANCHES         MRS    PATCH ISSUES    READY    CI FAILED    UNCHECKED    CACHED
@@ -31,7 +105,8 @@ pathauto    8.x-1.x          100              22        –            2        
 paragraphs  1.0.x,2.0.x       12              61        2            1           71    2m ago
 ```
 
-Name a module and every row carries what it is in plain English, and the command to run next:
+Then name a module, and every row says what it is in plain English **and the command
+to run next**:
 
 ```
 MODULE    ISSUE            VERSION  TITLE                    MR      PATCH  CI    LOCAL       STATUS          NEXT
@@ -42,112 +117,40 @@ pathauto  3311669 review   8.x-1.x  Punctuation processed…   !40 +1  2 ↑    
 pathauto  3597857 active   8.x-1.x  Config schema for form   –       4      –     stale 11    4 patches       upkeep patch:check pathauto 3597857
 ```
 
-**A row is one issue's work on one branch.** Not one per merge request, and not multiplied
-by the core versions you test — a single branch supports several cores at once, so core is
-evidence a row carries rather than part of what a row *is*.
+Every row yields a command. You never have to work out what to do with one.
 
 [What a row represents →](/guide/dashboard/)
 
-## The loop
-
-<CardGrid>
-  <Card title="Start at an issue" icon="pencil">
-    `issues` lists every open issue and what has already been contributed to it. `start`
-    provisions an environment and opens a work branch; `publish` pushes it to an issue fork
-    and opens the merge request.
-
-    [Work on an issue →](/guide/issue-loop/)
-  </Card>
-  <Card title="Check it properly" icon="approve-check">
-    A disposable per-module-per-core environment, then PHPUnit, PHPStan, PHPCS, install and
-    smoke. **The merge, not the branch** — the same tree drupal.org CI analyses.
-
-    [Running checks →](/guide/checks/)
-  </Card>
-  <Card title="See the patches" icon="document">
-    Plenty of contribution never becomes a merge request. `patches` finds issues carrying
-    patch files, checks one in isolation, or promotes it onto a branch credited to its author.
-
-    [Patch contributions →](/guide/patches/)
-  </Card>
-  <Card title="Look at the thing" icon="laptop">
-    `review` applies a merge request to a running site and hands back a URL with a one-time
-    login. Green checks are not the same as looking at it.
-
-    [Review and merge →](/guide/review-and-merge/)
-  </Card>
-  <Card title="Check against real state" icon="seti:db">
-    A fixture is a sanitised SQL dump committed to your module at `tests/fixtures/`. Capture
-    the site your module actually lives in once, and check against it every time.
-
-    [Fixtures →](/guide/fixtures/)
-  </Card>
-  <Card title="Any module, not just yours" icon="puzzle">
-    The registry is a watchlist, not a gate. Point any command at any Drupal module —
-    registered or not — and the dashboard stays the view of the ones you care about.
-
-    [The registry →](/guide/cockpit/)
-  </Card>
-</CardGrid>
-
-## Four steps to a cockpit
-
-<Steps>
-
-1. **Install.** One static binary — no PHP, no Composer, nothing to keep
-   up to date but the binary itself.
-
-   ```bash
-   brew install owenbush/tap/upkeep
-   ```
-
-   Linux, or no Homebrew: take the archive from the
-   [releases page](https://github.com/owenbush/upkeep/releases), or
-   `go install github.com/owenbush/upkeep/cmd/upkeep@latest`. See
-   [Install](/guide/install/) for all three.
-
-2. **Scaffold a cockpit** — the directory holding your registry, environments, base
-   artifacts, fixtures and cached results.
-
-   ```bash
-   upkeep init ~/my-cockpit && cd ~/my-cockpit
-   ```
-
-3. **Build the base artifacts** for a core version you maintain for. Every environment is
-   copied from these, so a cold start costs a copy rather than a resolve.
-
-   ```bash
-   upkeep base-artifacts:build --version=11
-   ```
-
-4. **Look at something.**
-
-   ```bash
-   upkeep issues pathauto
-   upkeep dashboard pathauto
-   ```
-
-</Steps>
-
-<Aside type="tip" title="Reading needs no credential">
-  git.drupalcode.org serves a public project's merge requests, refs, forks and raw files
-  anonymously, so `dashboard`, `issues`, `check` and `review` work with no token at all.
-  A [token](/guide/gitlab-token/) is for *writing*: merging, commenting and publishing.
-</Aside>
-
 ## One approval per merge
 
-Upkeep's fast lane finds the merge requests that cleared every gate — usually Project Update
-Bot compatibility work — and then asks you about each one, individually, before merging it.
+The fast lane finds the merge requests that cleared every gate — usually bot
+compatibility work — and then asks you about **each one, individually**, before
+merging it.
 
-There is deliberately **no batch mode and no unattended merge path**, and the browser UI
-deliberately has no merge button: a button that POSTs an action name is not the per-merge-request
-prompt that earns the approval. That is Drupal Association policy, and it is asserted
-structurally in the test suite rather than left to good intentions.
+There is deliberately no batch mode and no unattended merge path. That is Drupal
+Association policy, and it is asserted structurally in the test suite rather than
+left to good intentions.
+
+<Aside type="tip" title="Reading needs no credential">
+  git.drupalcode.org serves a public project's merge requests, refs, forks and raw
+  files anonymously, so `dashboard`, `issues`, `check` and `review` work with no
+  token at all. A [token](/guide/gitlab-token/) is for *writing*: merging,
+  commenting and publishing.
+</Aside>
+
+## Start here
 
 <CardGrid>
+  <LinkCard title="Install" href="/guide/install/"
+    description="Homebrew, go install, or an archive — plus shell completion for commands, module names and core versions." />
+  <LinkCard title="Set up a cockpit" href="/guide/cockpit/"
+    description="One directory holding your watchlist, environments, base artifacts, fixtures and cached results." />
+  <LinkCard title="The dashboard" href="/guide/dashboard/"
+    description="Everything open across every module you maintain, and what each row is telling you." />
+  <LinkCard title="Work on an issue" href="/guide/issue-loop/"
+    description="issues, start and publish: the loop that begins at an issue rather than somebody else's branch." />
+  <LinkCard title="Running checks" href="/guide/checks/"
+    description="The isolated flow, how it matches drupal.org CI, and the three reasons it can disagree." />
   <LinkCard title="Every command" href="/reference/commands/"
-    description="Generated from the CLI itself, and gated in CI — it cannot drift from what the binary does." />
-  <LinkCard title="Review, merge and release notes" href="/guide/review-and-merge/"
-    description="The fast lane, the per-merge-request prompt it still asks, and drafting notes for a release." />
+    description="Generated from the CLI itself and gated in CI, so it cannot drift from what the binary does." />
 </CardGrid>
