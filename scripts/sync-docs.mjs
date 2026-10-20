@@ -40,8 +40,10 @@ const PAGES = [
   ['guide/review-and-merge.md', 'guide/review-and-merge.md'],
   ['guide/environments.md', 'guide/environments.md'],
   ['guide/fixtures.md', 'guide/fixtures.md'],
+  ['guide/agents.md', 'guide/agents.md'],
   ['commands.md', 'reference/commands.md'],
   ['reference/exit-codes.md', 'reference/exit-codes.md'],
+  ['reference/json.md', 'reference/json.md'],
   ['reference/disk.md', 'reference/disk.md'],
   ['reference/upgrading.md', 'reference/upgrading.md'],
 ];

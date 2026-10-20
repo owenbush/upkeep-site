@@ -44,6 +44,7 @@ export default defineConfig({
             { label: 'Review, merge and release notes', slug: 'guide/review-and-merge' },
             { label: 'Working in an environment', slug: 'guide/environments' },
             { label: 'Fixtures', slug: 'guide/fixtures' },
+            { label: 'Agents', slug: 'guide/agents' },
           ],
         },
         {
@@ -51,6 +52,7 @@ export default defineConfig({
           items: [
             { label: 'Every command', slug: 'reference/commands' },
             { label: 'Exit codes', slug: 'reference/exit-codes' },
+            { label: 'Structured output', slug: 'reference/json' },
             { label: 'Disk housekeeping', slug: 'reference/disk' },
             { label: 'Upgrading a cockpit', slug: 'reference/upgrading' },
           ],
