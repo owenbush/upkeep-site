@@ -42,6 +42,7 @@ const PAGES = [
   ['guide/fixtures.md', 'guide/fixtures.md'],
   ['commands.md', 'reference/commands.md'],
   ['reference/exit-codes.md', 'reference/exit-codes.md'],
+  ['reference/json.md', 'reference/json.md'],
   ['reference/disk.md', 'reference/disk.md'],
   ['reference/upgrading.md', 'reference/upgrading.md'],
 ];

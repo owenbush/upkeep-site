@@ -51,6 +51,7 @@ export default defineConfig({
           items: [
             { label: 'Every command', slug: 'reference/commands' },
             { label: 'Exit codes', slug: 'reference/exit-codes' },
+            { label: 'Structured output', slug: 'reference/json' },
             { label: 'Disk housekeeping', slug: 'reference/disk' },
             { label: 'Upgrading a cockpit', slug: 'reference/upgrading' },
           ],
