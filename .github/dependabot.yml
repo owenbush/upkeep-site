@@ -1,0 +1,43 @@
+# Dependency updates.
+#
+# Three ecosystems, and unlike the upkeep repository the npm one here is the
+# high-maintenance half: Astro and Starlight move fast, `package.json` carries
+# caret ranges, and the deploy runs `npm ci` — so the lockfile is what actually
+# ships and nothing bumps it on its own. Left alone, this is the repository
+# that quietly rots.
+#
+# github-actions matters for the same reason it does over there: every action
+# is pinned to a major, which floats inside that major and then goes stale
+# silently when the next one ships.
+#
+# Weekly for npm rather than the monthly used in the other repository, because
+# the release cadence here genuinely is weekly and a month of Astro releases
+# is a bigger diff than a week of them.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      # Minor and patch together: the site either builds or it does not, and
+      # these are read as one answer to "does the current Astro still work".
+      astro-minor-and-patch:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
+    # A major arrives on its own and ungrouped. An Astro or Starlight major
+    # has broken a docs build before and wants its own pull request, its own
+    # read of the upgrade guide, and its own look at the built pages.
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      actions:
+        patterns:
+          - "*"
