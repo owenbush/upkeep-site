@@ -44,6 +44,7 @@ export default defineConfig({
             { label: 'Review, merge and release notes', slug: 'guide/review-and-merge' },
             { label: 'Working in an environment', slug: 'guide/environments' },
             { label: 'Fixtures', slug: 'guide/fixtures' },
+            { label: 'Agents', slug: 'guide/agents' },
           ],
         },
         {
