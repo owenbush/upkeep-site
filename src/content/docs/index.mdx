@@ -1,12 +1,13 @@
 ---
 title: Upkeep
-description: A maintenance orchestrator CLI for contributed Drupal modules — every open contribution, checked in an isolated environment, merged one deliberate approval at a time.
+description: "A maintenance orchestrator CLI for contributed Drupal modules: every open contribution, checked in an isolated environment, merged one deliberate approval at a time."
 template: splash
 hero:
+  title: Drupal contrib maintenance, from the terminal
   tagline: |
-    Every open issue, merge request and patch across every module you maintain —
-    triaged, checked in a disposable environment, and merged one deliberate
-    approval at a time. One static binary, no runtime to install.
+    Every open issue, merge request and patch across every Drupal module you
+    maintain: triaged, checked in a disposable environment, and merged one
+    deliberate approval at a time. One static binary, no runtime to install.
   actions:
     - text: Install
       link: /guide/install/
@@ -27,7 +28,7 @@ import { Card, CardGrid, LinkCard, Aside } from '@astrojs/starlight/components';
 brew install owenbush/tap/upkeep
 ```
 
-macOS and Linux, amd64 and arm64. No PHP and no Composer — the binary is static,
+macOS and Linux, amd64 and arm64. No PHP and no Composer. The binary is static,
 signed and notarized. Prefer Go, or no Homebrew?
 
 ```bash
@@ -40,13 +41,14 @@ shell completion, are in [Install](/guide/install/).
 
 ## The problem
 
-Maintaining a contrib module is mostly triage, and the triage is the expensive part.
+Maintaining a contributed Drupal module is mostly triage, and the triage is the
+expensive part.
 A mature project carries a hundred open merge requests, sixty issues with patches
 attached, and a Project Update Bot compatibility branch waiting on every new core
 release. Working out which of those is actually ready costs more than reviewing the
 one that is.
 
-So the work piles up — not because the fixes are hard, but because finding the
+So the work piles up, not because the fixes are hard, but because finding the
 ready ones means a browser, a dozen tabs, and a local site you daren't break.
 
 ## Where it helps
@@ -55,16 +57,16 @@ ready ones means a browser, a dozen tabs, and a local site you daren't break.
   <Card title="The next core version just landed" icon="rocket">
     Project Update Bot opens a compatibility merge request on every module you
     maintain. Check all of them against the new core in disposable environments,
-    then merge the green ones — each with its own deliberate yes.
+    then merge the green ones, each with its own deliberate yes.
 
     Base artifacts for a **pre-release** core major are a supported, deliberate
     build, because that is when compatibility work actually happens.
   </Card>
   <Card title="Green locally, red on CI" icon="warning">
-    drupal.org does not test the contributor's branch — it tests that branch merged
+    drupal.org does not test the contributor's branch. It tests that branch merged
     into the *current* tip of the target. Measured on pathauto: **23 of 25 open
-    merge requests** have a merge tree that differs from their branch, some of them
-    41 commits behind.
+    merge requests** have a merge tree that differs from their branch, some of
+    them 41 commits behind.
 
     Upkeep checks the same tree CI does, so a local pass means something.
   </Card>
@@ -83,12 +85,12 @@ ready ones means a browser, a dozen tabs, and a local site you daren't break.
   <Card title="Your module needs more than an empty site" icon="seti:db">
     A module that manages vocabulary terms cannot be tested without terms. Capture
     the state once as a sanitised, committed fixture and check against it every
-    time — including the other contrib it needs, installed automatically wherever
+    time, including the other contrib it needs, installed automatically wherever
     it is loaded.
   </Card>
   <Card title="The issue queue moved to GitLab" icon="puzzle">
     drupal.org is migrating issue queues, one project at a time. Upkeep asks each
-    project where its issues live and reads whichever queue is the live one — so a
+    project where its issues live and reads whichever queue is the live one, so a
     migrated project keeps working, including issues that have no drupal.org node
     at all.
   </Card>
@@ -123,8 +125,8 @@ Every row yields a command. You never have to work out what to do with one.
 
 ## One approval per merge
 
-The fast lane finds the merge requests that cleared every gate — usually bot
-compatibility work — and then asks you about **each one, individually**, before
+The fast lane finds the merge requests that cleared every gate, usually bot
+compatibility work, and then asks you about **each one, individually**, before
 merging it.
 
 There is deliberately no batch mode and no unattended merge path. That is Drupal
@@ -142,7 +144,7 @@ left to good intentions.
 
 <CardGrid>
   <LinkCard title="Install" href="/guide/install/"
-    description="Homebrew, go install, or an archive — plus shell completion for commands, module names and core versions." />
+    description="Homebrew, go install, or an archive, plus shell completion for commands, module names and core versions." />
   <LinkCard title="Set up a cockpit" href="/guide/cockpit/"
     description="One directory holding your watchlist, environments, base artifacts, fixtures and cached results." />
   <LinkCard title="The dashboard" href="/guide/dashboard/"
