@@ -38,6 +38,21 @@
   --sl-color-gray-5: #262a31;
   --sl-color-gray-6: #1d2026;
   --sl-color-black: #0c0e11;
+
+  /*
+   * Starlight defines gray-7 in its light theme only, so LinkCard's hover
+   * reads it as `var(--sl-color-gray-7, var(--sl-color-gray-6))` and depends on
+   * that fallback in the dark. Recolouring the palette here defeats the
+   * fallback: the light value is set on bare :root, which this block inherits
+   * rather than replaces, so the variable is always defined and the second
+   * argument never applies. A dark hover therefore painted the near-white
+   * light-mode surface, putting the title and the arrow at 1.03:1 against it
+   * (invisible) and the description at 2.3:1. The value is gray-6's, which is
+   * what the fallback would have given. Nothing else reads gray-7 in the dark:
+   * Starlight's dark --sl-color-bg-nav is gray-6, and expressive-code picks
+   * gray-6 explicitly when the theme is dark.
+   */
+  --sl-color-gray-7: #1d2026;
 }
 
 /*
