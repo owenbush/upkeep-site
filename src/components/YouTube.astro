@@ -1,0 +1,224 @@
+---
+/**
+ * A click-to-play YouTube embed.
+ *
+ * Renders the poster frame and swaps the player in when somebody asks for it,
+ * rather than loading an iframe with the page. The embedded player is around a
+ * megabyte of script and it starts talking to Google before anyone has decided
+ * to watch — a cost every visitor to the landing page pays and few of them use.
+ *
+ * Degradation is the reason this is a link and not a button. Without
+ * JavaScript it stays exactly what the markup says it is: a link to the video
+ * on YouTube. The poster is never a dead end, and keyboard and screen-reader
+ * behaviour come from the anchor rather than from ARIA added on top.
+ */
+interface Props {
+  id: string;
+  title: string;
+}
+
+const { id, title } = Astro.props;
+
+// youtube-nocookie serves the same player from a domain that holds off on the
+// tracking cookies until playback actually starts. rel=0 keeps the end screen
+// to this channel instead of offering whatever YouTube would rather show next.
+const embed = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`;
+
+// The 16:9 poster. hqdefault always exists but is 4:3 with black bars baked
+// into the image, which would letterbox inside a 16:9 frame; maxres is the
+// real frame and is present for anything recorded above 720p.
+const poster = `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`;
+const watch = `https://www.youtube.com/watch?v=${id}`;
+---
+
+<div class="yt" data-embed={embed} data-title={title}>
+  <a class="yt-poster" href={watch}>
+    <img
+      src={poster}
+      alt=""
+      width="1280"
+      height="720"
+      loading="lazy"
+      decoding="async"
+    />
+    <span class="yt-play">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
+        <path d="M8 5v14l11-7z"></path>
+      </svg>
+      <span class="yt-label">Watch: {title}</span>
+    </span>
+  </a>
+</div>
+
+<style>
+  /*
+   * aspect-ratio rather than the old padding-top trick, so the box is the
+   * right shape before the poster arrives and the page does not shift when it
+   * does. The img carries width/height for the same reason.
+   */
+  .yt {
+    aspect-ratio: 16 / 9;
+    margin-block: 1.5rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    background: var(--sl-color-gray-6);
+  }
+
+  .yt :global(iframe),
+  .yt-poster img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .yt-poster {
+    position: relative;
+    display: block;
+    height: 100%;
+    /* The poster is the link, so Starlight's prose link styling has nothing
+       useful to say about it. */
+    text-decoration: none;
+  }
+
+  .yt-poster img {
+    object-fit: cover;
+  }
+
+  /*
+   * Bottom right, not the middle. A poster is a designed frame with its own
+   * title, and this one sets that title left of centre — a centred button
+   * lands on the words. The corner is clear on this thumbnail and on most,
+   * and the affordance does not rest on the button alone: the whole poster is
+   * the link and the scrim lifts under the pointer.
+   */
+  .yt-play {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding: 1.25rem;
+    /* Dims the poster a little so the button holds its contrast whatever
+       frame YouTube picked. */
+    background: rgb(0 0 0 / 0.25);
+    transition: background 150ms ease;
+  }
+
+  /*
+   * The glyph is a literal white and the chip a literal accent, both held
+   * steady across themes, which is the opposite of what the rest of this site
+   * does and is the point.
+   *
+   * --sl-color-white is the *text* colour in this palette: #131619 in the
+   * light theme and #f5f4f0 in the dark. --sl-color-accent-high flips the
+   * same way, #1d3a91 against #a1c0ee. Reading either here put the triangle at
+   * 1.69:1 on hover in the dark and 1.79:1 in the light — invisible both
+   * ways — because the chip it sits on is an accent that does *not* invert.
+   * A fixed glyph on a fixed ground is 6.46:1 in both themes.
+   *
+   * Hover brightens the chip rather than swapping in another palette entry,
+   * so there is no second colour to keep in step with this one.
+   */
+  .yt-play svg {
+    width: 4.5rem;
+    height: 4.5rem;
+    padding: 0.75rem 0.65rem 0.75rem 0.85rem;
+    box-sizing: border-box;
+    color: #fff;
+    background: var(--sl-color-accent);
+    border-radius: 0.75rem;
+    box-shadow: 0 0.25rem 1rem rgb(0 0 0 / 0.35);
+    transition:
+      transform 150ms ease,
+      filter 150ms ease;
+  }
+
+  /* Visible to assistive technology, and the accessible name of the link. */
+  .yt-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    clip-path: inset(50%);
+  }
+
+  .yt-poster:hover .yt-play,
+  .yt-poster:focus-visible .yt-play {
+    background: rgb(0 0 0 / 0.1);
+  }
+
+  .yt-poster:hover .yt-play svg,
+  .yt-poster:focus-visible .yt-play svg {
+    transform: scale(1.08);
+    filter: brightness(1.12);
+  }
+
+  .yt-poster:focus-visible {
+    outline: 2px solid var(--sl-color-accent);
+    outline-offset: 2px;
+  }
+
+  /*
+   * The chip is sized for a frame about a thousand pixels wide. Left alone it
+   * is a third of the height of a 358px one, which reads as a sticker rather
+   * than a control.
+   */
+  @media (max-width: 50rem) {
+    .yt-play {
+      padding: 0.75rem;
+    }
+
+    .yt-play svg {
+      width: 3rem;
+      height: 3rem;
+      padding: 0.5rem 0.4rem 0.5rem 0.6rem;
+      border-radius: 0.5rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .yt-play,
+    .yt-play svg {
+      transition: none;
+    }
+
+    .yt-poster:hover .yt-play svg,
+    .yt-poster:focus-visible .yt-play svg {
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  /*
+   * Hoisted and bundled by Astro, and it runs once no matter how many embeds a
+   * page has — so this binds every one of them rather than assuming a single
+   * instance.
+   */
+  document.querySelectorAll<HTMLElement>('.yt').forEach((box) => {
+    const link = box.querySelector('a');
+    const { embed, title } = box.dataset;
+    if (!link || !embed) return;
+
+    link.addEventListener('click', (event) => {
+      // Leave the modified clicks alone: ctrl/cmd-click and middle-click mean
+      // "open this somewhere else", and the href is the right answer to that.
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return;
+      event.preventDefault();
+
+      const player = document.createElement('iframe');
+      player.src = embed;
+      player.title = title ?? 'YouTube video';
+      player.allow =
+        'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+      player.allowFullscreen = true;
+      box.replaceChildren(player);
+      player.focus();
+    });
+  });
+</script>
