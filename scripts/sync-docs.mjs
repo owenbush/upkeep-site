@@ -46,6 +46,7 @@ const PAGES = [
   ['reference/json.md', 'reference/json.md'],
   ['reference/disk.md', 'reference/disk.md'],
   ['reference/upgrading.md', 'reference/upgrading.md'],
+  ['reference/drupalorg-cli.md', 'reference/drupalorg-cli.md'],
 ];
 
 const route = (dest) => '/' + dest.replace(/\.md$/, '') + '/';

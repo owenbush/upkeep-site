@@ -55,6 +55,7 @@ export default defineConfig({
             { label: 'Structured output', slug: 'reference/json' },
             { label: 'Disk housekeeping', slug: 'reference/disk' },
             { label: 'Upgrading a cockpit', slug: 'reference/upgrading' },
+            { label: 'Where drupalorg-cli is used', slug: 'reference/drupalorg-cli' },
           ],
         },
       ],
